@@ -20,8 +20,11 @@ def main():
     p.init()
     screen = p.display.set_mode((WIDTH, HEIGHT)) #mettre l'écran par les dimensions
     clock = p.time.Clock()
-    screen.fill(p.Color("white")) #couleur de l'écran
+    screen.fill(p.Color("green")) #couleur de l'écran
     gs = ChessEngine.GameState()
+    validMoves = gs.getValidMoves()
+    moveMade = False #variable pour savoir si un mouvement est fait
+
     loadImages()
     running = True
     sqSelected = () # no square is selected, keep track of the last click of the user tuple(row,col)
@@ -40,13 +43,24 @@ def main():
                 else:
                     sqSelected = (row, col) # sinon prendre les nouvelle cordonne du nouveau carré
                     playerClicks.append(sqSelected) #l'ajouter au clicque du joueur
-                    print("séletionné")
                 if len(playerClicks) == 2: #si la taille du clique du joueur est égale a 2, alors :
                     move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board) # mettre la premiere piece a l'endroit de la deuxieme sur le tableau
                     print(move.getChessNotation()) # mettre les notations de mouvements
+                    if move in validMoves:
+                        gs.makeMove(move)
+                        moveMade = True
                     gs.makeMove(move) # bouger les pieces
                     sqSelected = () #reset
                     playerClicks = [] #reset
+
+            elif e.type == p.KEYDOWN:
+                if e.key == p.K_z: #undo when z is pressed
+                    gs.undoMove()
+                    moveMade = True
+
+        if moveMade:
+            validMoves = gs.getValidMoves()
+            moveMade = False
 
         drawGameState(screen,gs)
         clock.tick(MAX_FPS)
