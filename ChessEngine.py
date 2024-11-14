@@ -8,13 +8,14 @@ class GameState():
         self.board = [
             ["bR","bN","bB","bQ","bK","bB","bN","bR"],
             ["bp","bp","bp","bp","bp","bp","bp","bp"],
-            ["--", "--", "--", "--", "--", "--", "--", "--"],
+            ["--", "--", "wp", "--", "--", "--", "--", "--"],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
             ["--", "--", "--", "--", "--", "--", "--", "--"], 
-            ["--", "--", "--", "--", "--", "--", "--", "--"],
+            ["--", "--", "bp", "--", "--", "--", "--", "--"],
             ["wp","wp","wp","wp","wp","wp","wp","wp"],
             ["wR","wN","wB","wQ","wK","wB","wN","wR"]]
-        self.moveFunctions = {"p": self.getPawnMoves, "R": self.getRookMoves, "N" :self.getKnightMoves, "B": self.getBishopMoves, "Q" : self.getQueenMoves, "K" : self.getKingMoves}
+        self.moveFunctions = {"p": self.getPawnMoves, "R": self.getRookMoves, "N" :self.getKnightMoves,
+                            "B": self.getBishopMoves, "Q" : self.getQueenMoves, "K" : self.getKingMoves}
         self.whiteToMove = True
         self.moveLog = []
 
@@ -31,9 +32,9 @@ class GameState():
 
     #le dernier mouvement executé
     def undoMove(self):
-        if len(self.moveLog) != 0: 
-            move = self.moveLog.pop()
-            self.board[move.startRow][move.startCol] = move.pieceMoved
+        if len(self.moveLog) != 0: #si un coup a ete enregistré
+            move = self.moveLog.pop() #revenir en arriere
+            self.board[move.startRow][move.startCol] = move.pieceMoved 
             self.board[move.endRow][move.endCol] = move.pieceCaptured
             self.whiteToMove = not self.whiteToMove #change de joueur
 
@@ -48,28 +49,36 @@ class GameState():
         moves = [Move((6,4), (4,4), self.board)]
         for r in range(len(self.board)): #nombre de ligne 
             for c in range(len(self.board[r])): #nombre de colonne
-                turn = self.board[r][c][0]
-                if (turn == "w" and self.whiteToMove) or (turn == "b" and not self.whiteToMove):
-                    piece = self.board[r][c][1]
+                turn = self.board[r][c][0] #prend la couleur de la piece sur la ligne et colonne.
+                if (turn == "w" and self.whiteToMove) or (turn == "b" and not self.whiteToMove): #si c'est le tour au blanc
+                    piece = self.board[r][c][1] #prendre la pièce
                     self.moveFunctions[piece](r,c,moves) #appelle la fonction approprié pour la piece
         return moves
 
 
     def getPawnMoves(self, r, c, moves):
         if self.whiteToMove: #verifier si blanc joue
-            print("here")
-            if self.board[r-1][c] == "--":
-                moves.append(Move((r,c), (r-1,c), self.board))
-                if r == 6 and self.board[r-2][c] == "--":
-                    moves.append(Move((r,c),(r-2,c), self.board))
+            if self.board[r-1][c] == "--": # si la case devant le pion est vide
+                moves.append(Move((r,c), (r-1,c), self.board)) # alors avancer de 1 case
+                if r == 6 and self.board[r-2][c] == "--": #si le pion est sur sa ligne de départ et que 2 ligne devant il n'y a rien
+                    moves.append(Move((r,c),(r-2,c), self.board)) #avance 2 deux case vers l'avant
             if c-1 >= 0: #capture a gauche
-                if self.board[r-1][c-1][0] == "b": #piece enemie
-                    moves.append(Move((r,c),(r-1,c-1), self.board))
+                if self.board[r-1][c-1][0] == "b": #si piece enemie est noir diagonal gauche
+                    moves.append(Move((r,c),(r-1,c-1), self.board)) #manger la piece noir
             if c+1 < 7: # capture a droite
-                if self.board[r-1][c+1][0] == "b":
-                    moves.append(Move((r,c),(r-1,c+1), self.board))
+                if self.board[r-1][c+1][0] == "b": #si la piece diagonal droite est noir
+                    moves.append(Move((r,c),(r-1,c+1), self.board)) # manger la piece noir
         else: #pion noir
-            pass
+            if self.board[r+1][c] == "--": # si la case devant le pion est vide
+                moves.append(Move((r,c), (r+1,c), self.board)) # alors avancer de 1 case
+                if r == 1 and self.board[r+2][c] == "--": #si le pion est sur sa ligne de départ et que 2 ligne devant il n'y a rien
+                    moves.append(Move((r,c),(r+2,c), self.board)) #avance 2 deux case vers l'avant
+            if c-1 >= 0: #capture a droite
+                if self.board[r+1][c-1][0] == "w": #si piece enemie est noir diagonal gauche
+                    moves.append(Move((r,c),(r+1,c-1), self.board)) #manger la piece noir
+            if c+1 < 7: # capture a droite
+                if self.board[r+1][c+1][0] == "w": #si la piece diagonal droite est noir
+                    moves.append(Move((r,c),(r+1,c+1), self.board)) # manger la piece noir
 
     def getRookMoves(self,r,c,moves):
         pass
