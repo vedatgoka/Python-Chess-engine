@@ -47,16 +47,15 @@ def main():
                     move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board) # mettre la premiere piece a l'endroit de la deuxieme sur le tableau
                     print(move.getChessNotation()) # mettre les notations de mouvements
                     if move in validMoves:
-                        gs.makeMove(move)
+                        gs.makeMove(move)# bouger les pieces
                         moveMade = True
-                    gs.makeMove(move) # bouger les pieces
                     sqSelected = () #reset
                     playerClicks = [] #reset
 
             elif e.type == p.KEYDOWN:
                 if e.key == p.K_z: #undo when z is pressed
-                    gs.undoMove()
-                    moveMade = True
+                    gs.undoMove() #appelle la fonction 
+                    moveMade = True #le move a ete fait
 
         if moveMade:
             validMoves = gs.getValidMoves()
