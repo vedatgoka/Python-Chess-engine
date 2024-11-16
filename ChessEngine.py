@@ -10,7 +10,7 @@ class GameState():
             ["bp","bp","bp","bp","bp","bp","bp","bp"],
             ["--", "--", "wp", "--", "--", "--", "--", "--"],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
-            ["--", "--", "--", "--", "--", "--", "--", "--"], 
+            ["--", "--", "--", "wK", "--", "--", "--", "--"], 
             ["--", "--", "bp", "--", "--", "--", "--", "--"],
             ["wp","wp","wp","wp","wp","wp","wp","wp"],
             ["wR","wN","wB","wQ","wK","wB","wN","wR"]]
@@ -76,24 +76,110 @@ class GameState():
             if c-1 >= 0: #capture a droite
                 if self.board[r+1][c-1][0] == "w": #si piece enemie est noir diagonal gauche
                     moves.append(Move((r,c),(r+1,c-1), self.board)) #manger la piece noir
-            if c+1 < 7: # capture a droite
+            if c+1 <= 7: # capture a droite
                 if self.board[r+1][c+1][0] == "w": #si la piece diagonal droite est noir
                     moves.append(Move((r,c),(r+1,c+1), self.board)) # manger la piece noir
 
     def getRookMoves(self,r,c,moves):
-        pass
+        directions = ((-1,0), (0,-1), (1,0),(0,1)) #up left, down, right
+        enemyColor = "b" if self.whiteToMove else "w" #si c'est le tour blanc, "b"
+        for d in directions:
+            for i in range(1,8):
+                for i in range(1,8):
+                    endRow = r + d[0] * i
+                    endCol = c + d[1] * i
+                    if 0 <= endRow < 8 and 0 <= endCol < 8:
+                        endPiece = self.board[endRow][endCol]
+                        if endPiece == "--":
+                            moves.append(Move((r,c),(endRow,endCol), self.board))
+                        elif endPiece[0] == enemyColor:
+                            moves.append(Move((r,c),(endRow,endCol),self.board))
+                            break
+                        else:
+                            break
+                    else:
+                        break
 
     def getKnightMoves(self,r,c,moves):
-        pass
+        directions = ((-2,-1), (-2,1), (2,-1),(2,1), (1,2),(-1,2),(1,-2),(-1,-2)) #up left, down, right
+        enemyColor = "b" if self.whiteToMove else "w" #si c'est le tour blanc, "b"
+        for d in directions:
+            for i in range(1,8):
+                for i in range(1,8):
+                    endRow = r + d[0] * i
+                    endCol = c + d[1] * i
+                    if 0 <= endRow < 8 and 0 <= endCol < 8:
+                        endPiece = self.board[endRow][endCol]
+                        if endPiece == "--":
+                            moves.append(Move((r,c),(endRow,endCol), self.board))
+                        elif endPiece[0] == enemyColor:
+                            moves.append(Move((r,c),(endRow,endCol),self.board))
+                            break
+                        else:
+                            break
+                    else:
+                        break
 
     def getBishopMoves(self,r,c,moves):
-        pass
+        directions = ((-1,-1), (-1,1), (1,-1),(1,1)) # up_left , up_right, down_left, down_right
+        enemyColor = "b" if self.whiteToMove else "w" #si c'est le tour blanc, "b"
+        for d in directions:
+            for i in range(1,8):
+                for i in range(1,8):
+                    endRow = r + d[0] * i
+                    endCol = c + d[1] * i
+                    if 0 <= endRow < 8 and 0 <= endCol < 8:
+                        endPiece = self.board[endRow][endCol]
+                        if endPiece == "--":
+                            moves.append(Move((r,c),(endRow,endCol), self.board))
+                        elif endPiece[0] == enemyColor:
+                            moves.append(Move((r,c),(endRow,endCol),self.board))
+                            break
+                        else:
+                            break
+                    else:
+                        break
 
     def getQueenMoves(self,r,c,moves):
-        pass
+        directions = ((-1,0), (0,-1), (1,0),(0,1),(-1,-1), (-1,1), (1,-1),(1,1)) # up_left , up_right, down_left, down_right
+        enemyColor = "b" if self.whiteToMove else "w" #si c'est le tour blanc, "b"
+        for d in directions:
+            for i in range(1,8):
+                for i in range(1,8):
+                    endRow = r + d[0] * i
+                    endCol = c + d[1] * i
+                    if 0 <= endRow < 8 and 0 <= endCol < 8:
+                        endPiece = self.board[endRow][endCol]
+                        if endPiece == "--":
+                            moves.append(Move((r,c),(endRow,endCol), self.board))
+                        elif endPiece[0] == enemyColor:
+                            moves.append(Move((r,c),(endRow,endCol),self.board))
+                            break
+                        else:
+                            break
+                    else:
+                        break
+
 
     def getKingMoves(self,r,c,moves):
-        pass
+        directions = ((-1,0), (0,-1), (1,0),(0,1),(-1,-1), (-1,1), (1,-1),(1,1)) # up_left , up_right, down_left, down_right
+        enemyColor = "b" if self.whiteToMove else "w" #si c'est le tour blanc, "b"
+        for d in directions:
+            for i in range(1,8):
+                for i in range(1,8):
+                    endRow = r + d[0]
+                    endCol = c + d[1]
+                    if 0 <= endRow < 8 and 0 <= endCol < 8:
+                        endPiece = self.board[endRow][endCol]
+                        if endPiece == "--":
+                            moves.append(Move((r,c),(endRow,endCol), self.board))
+                        elif endPiece[0] == enemyColor:
+                            moves.append(Move((r,c),(endRow,endCol),self.board))
+                            break
+                        else:
+                            break
+                    else:
+                        break
 
 
     
