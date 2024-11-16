@@ -74,10 +74,23 @@ def drawGameState(screen,gs):
 # dessine l'échequier avec une case sur 2 gris puis blanc
 def drawBoard(screen):
     colors = [p.Color("white"), p.Color("gray")]
+
+    font = p.font.SysFont('Arial', 24, bold=True)
     for row in range(DIMENSION):
         for column in range(DIMENSION):
             color= colors[((row+column) % 2)]
             p.draw.rect(screen, color, p.Rect(column*SQ_SIZE, row*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+
+                        # Ajouter les numéros horizontaux de droite à gauche (en haut)
+            if row == 0:
+                number_text = font.render(str(1 + column), True, p.Color("green"))
+                screen.blit(number_text, (column * SQ_SIZE + 5, 5))
+
+            # Ajouter les numéros verticaux de haut en bas (à gauche)
+            if column == 0:
+                number_text = font.render(str(1 + row), True, p.Color("green"))
+                screen.blit(number_text, (5, row * SQ_SIZE + 5))
+
 
 # fonction qui dessine les pieces
 def drawPieces(screen,board):
