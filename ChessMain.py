@@ -46,11 +46,13 @@ def main():
                 if len(playerClicks) == 2: #si la taille du clique du joueur est égale a 2, alors :
                     move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board) # mettre la premiere piece a l'endroit de la deuxieme sur le tableau
                     print(move.getChessNotation()) # mettre les notations de mouvements
-                    if move in validMoves:
+                    if not validMoves == None and move in validMoves:
                         gs.makeMove(move)# bouger les pieces
                         moveMade = True
-                    sqSelected = () #reset
-                    playerClicks = [] #reset
+                        sqSelected = () #reset
+                        playerClicks = [] #reset
+                    else:
+                        playerClicks = [sqSelected]
 
             elif e.type == p.KEYDOWN:
                 if e.key == p.K_z: #undo when z is pressed
